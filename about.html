@@ -4,6 +4,140 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Palestine Solidarity Committee - About</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    />
+    <link rel="icon" type="image/png" href="images/psclogo_transparent.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <!-- Custom Colors & Fonts to use -->
+    <link rel="stylesheet" href="styles.css" />
   </head>
-  <body></body>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+      <div class="container">
+        <div class="navbar-brand">
+          <a id="headlogo" class="navbar-item" href="index.html">
+            <figure class="image is-48x48 max-height-48">
+              <img
+                src="images/psclogo_transparent.png"
+                style="max-height: none; height: 48px; width: 48px"
+                alt="PSC Logo"
+              />
+            </figure>
+            <span class="has-text-weight-bold is-size-3">PSC</span>
+          </a>
+
+          <a
+            role="button"
+            class="navbar-burger"
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="mainNavbar"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div id="mainNavbar" class="navbar-menu">
+          <div class="navbar-start"></div>
+          <div class="navbar-item">
+            <div class="buttons">
+              <a href="index.html">
+                <button
+                  id="navindex"
+                  class="button is-black is-size-5 has-text-weight-semibold"
+                  style="border: none"
+                >
+                  Home
+                </button>
+              </a>
+              <a href="events.html">
+                <button
+                  id="navevents"
+                  class="button is-black is-size-5 has-text-weight-semibold"
+                >
+                  Events
+                </button>
+              </a>
+              <a href="about.html">
+                <button
+                  id="navabout"
+                  class="button is-green-active is-size-5 has-text-weight-semibold"
+                >
+                  About Us
+                </button>
+              </a>
+            </div>
+          </div>
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <div class="buttons">
+                <button
+                  id="navlogin"
+                  class="button is-green is-size-5 has-text-weight-semibold signedout"
+                >
+                  Log In
+                </button>
+                <button
+                  id="navsignup"
+                  class="button is-green is-size-5 has-text-weight-bold signedout border-green"
+                >
+                  Sign Up
+                </button>
+
+                <button
+                  id="navsignout"
+                  class="button is-red is-size-5 has-text-weight-semibold signedin is-hidden"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+     <!-- footer -->
+    <footer class="footer has-background-black p-4">
+      <div class="container">
+        <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <span class="has-text-white is-size-6"
+                >© 2026 Palestine Solidarity Committee</span
+              >
+            </div>
+          </div>
+
+          <div class="level-right">
+            <div class="level-item">
+              <div class="buttons">
+                <a href="contact.html">
+                  <button
+                    id="navcontact"
+                    class="button is-black"
+                  >
+                    Contact
+                  </button>
+                </a>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>

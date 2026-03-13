@@ -1,0 +1,88 @@
+/* For background colors */
+.has-background-green {
+  background-color: #00843d;
+}
+.has-background-red {
+  background-color: #ce1226;
+}
+.has-background-black {
+  background-color: #1a1a1a;
+}
+
+/* For text colors */
+.has-text-red {
+  color: #ce1226;
+}
+.has-text-green {
+  color: #00843d;
+}
+.has-text-black {
+  color: #1a1a1a;
+}
+.has-text-white {
+  color: #fff;
+}
+
+/* For button colors */
+.is-red {
+  background-color: #ce1226;
+  color: #fff;
+}
+.is-green {
+  background-color: #00843d;
+  color: #fff;
+  border: none;
+}
+.is-black {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+.is-green-active {
+  background-color: #00662b;
+  color: #fff;
+  border: none;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem 2rem 1rem;
+  text-align: center;
+  background-image: url("images/luminahero.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #c5050c;
+  /* White outline using multiple text-shadows */
+  text-shadow:
+    -1px -1px 0 #fff,
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff,
+    1px 1px 0 #fff,
+    0px -1px 0 #fff,
+    0px 1px 0 #fff,
+    -1px 0px 0 #fff,
+    1px 0px 0 #fff;
+}
+.has-text-shadow2 {
+  text-shadow:
+    -1px -1px 0 #fff,
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff,
+    1px 1px 0 #fff,
+    0px -1px 0 #fff,
+    0px 1px 0 #fff,
+    -1px 0px 0 #fff,
+    1px 0px 0 #fff;
+}
+
+.button:hover {
+  filter: brightness(50%); /* darken on hover */
+}
