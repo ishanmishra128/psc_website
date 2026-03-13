@@ -50,7 +50,7 @@
   justify-content: center;
   padding: 4rem 1rem 2rem 1rem;
   text-align: center;
-  background-image: url("images/luminahero.jpg");
+  background-image: url("images/psc_hero.jpg");
   background-size: cover;
   background-position: center;
 }
@@ -62,25 +62,25 @@
   color: #c5050c;
   /* White outline using multiple text-shadows */
   text-shadow:
-    -1px -1px 0 #fff,
-    1px -1px 0 #fff,
-    -1px 1px 0 #fff,
-    1px 1px 0 #fff,
-    0px -1px 0 #fff,
-    0px 1px 0 #fff,
-    -1px 0px 0 #fff,
-    1px 0px 0 #fff;
+    -1px -1px 0 #1a1a1a,
+    1px -1px 0 #1a1a1a,
+    -1px 1px 0 #1a1a1a,
+    1px 1px 0 #1a1a1a,
+    0px -1px 0 #1a1a1a,
+    0px 1px 0 #1a1a1a,
+    -1px 0px 0 #1a1a1a,
+    1px 0px 0 #1a1a1a;
 }
 .has-text-shadow2 {
   text-shadow:
-    -1px -1px 0 #fff,
-    1px -1px 0 #fff,
-    -1px 1px 0 #fff,
-    1px 1px 0 #fff,
-    0px -1px 0 #fff,
-    0px 1px 0 #fff,
-    -1px 0px 0 #fff,
-    1px 0px 0 #fff;
+    -1px -1px 0 #1a1a1a,
+    1px -1px 0 #1a1a1a,
+    -1px 1px 0 #1a1a1a,
+    1px 1px 0 #1a1a1a,
+    0px -1px 0 #1a1a1a,
+    0px 1px 0 #1a1a1a,
+    -1px 0px 0 #1a1a1a,
+    1px 0px 0 #1a1a1a;
 }
 
 .button:hover {
