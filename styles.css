@@ -37,8 +37,8 @@
   background-color: #1a1a1a;
   color: #fff;
 }
-.is-green-active {
-  background-color: #00662b;
+.is-red-active {
+  background-color: #ce1226;
   color: #fff;
   border: none;
 }
@@ -62,27 +62,40 @@
   color: #c5050c;
   /* White outline using multiple text-shadows */
   text-shadow:
-    -1px -1px 0 #1a1a1a,
-    1px -1px 0 #1a1a1a,
-    -1px 1px 0 #1a1a1a,
-    1px 1px 0 #1a1a1a,
-    0px -1px 0 #1a1a1a,
-    0px 1px 0 #1a1a1a,
-    -1px 0px 0 #1a1a1a,
-    1px 0px 0 #1a1a1a;
+    -1px -1px 0 #ce1226,
+    1px -1px 0 #ce1226,
+    -1px 1px 0 #ce1226,
+    1px 1px 0 #ce1226,
+    0px -1px 0 #ce1226,
+    0px 1px 0 #ce1226,
+    -1px 0px 0 #ce1226,
+    1px 0px 0 #ce1226;
 }
 .has-text-shadow2 {
   text-shadow:
-    -1px -1px 0 #1a1a1a,
-    1px -1px 0 #1a1a1a,
-    -1px 1px 0 #1a1a1a,
-    1px 1px 0 #1a1a1a,
-    0px -1px 0 #1a1a1a,
-    0px 1px 0 #1a1a1a,
-    -1px 0px 0 #1a1a1a,
-    1px 0px 0 #1a1a1a;
+    -1px -1px 0 #ce1226,
+    1px -1px 0 #ce1226,
+    -1px 1px 0 #ce1226,
+    1px 1px 0 #ce1226,
+    0px -1px 0 #ce1226,
+    0px 1px 0 #ce1226,
+    -1px 0px 0 #ce1226,
+    1px 0px 0 #ce1226;
 }
 
 .button:hover {
   filter: brightness(50%); /* darken on hover */
+}
+
+footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  padding: 10px 0;
+}
+.event-card {
+  border: 1.5px solid #48c774;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 1rem auto;
 }

@@ -13,17 +13,14 @@
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
     />
     <link rel="icon" type="image/png" href="images/psclogo_transparent.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Custom Colors & Fonts to use -->
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <!-- navbar -->
-    <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-white" role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
           <a id="headlogo" class="navbar-item" href="index.html">
@@ -57,7 +54,7 @@
               <a href="index.html">
                 <button
                   id="navindex"
-                  class="button is-black is-size-5 has-text-weight-semibold"
+                  class="button is-white is-size-5 has-text-weight-semibold"
                   style="border: none"
                 >
                   Home
@@ -66,7 +63,7 @@
               <a href="events.html">
                 <button
                   id="navevents"
-                  class="button is-green-active is-size-5 has-text-weight-semibold"
+                  class="button is-red-active is-size-5 has-text-weight-semibold"
                 >
                   Events
                 </button>
@@ -74,7 +71,7 @@
               <a href="about.html">
                 <button
                   id="navabout"
-                  class="button is-black is-size-5 has-text-weight-semibold"
+                  class="button is-white is-size-5 has-text-weight-semibold"
                 >
                   About Us
                 </button>
@@ -86,13 +83,13 @@
               <div class="buttons">
                 <button
                   id="navlogin"
-                  class="button is-green is-size-5 has-text-weight-semibold signedout"
+                  class="button is-red-active is-size-5 has-text-weight-semibold signedout"
                 >
                   Log In
                 </button>
                 <button
                   id="navsignup"
-                  class="button is-green is-size-5 has-text-weight-bold signedout border-green"
+                  class="button is-red-active is-size-5 has-text-weight-bold signedout border-green"
                 >
                   Sign Up
                 </button>
@@ -109,6 +106,122 @@
         </div>
       </div>
     </nav>
+
+    <!-- MAIN CONTENT -->
+<!-- Hero -->
+       <section
+        class="hero is-small"
+        style="
+          background-image: url('images/psc_hero2.jpg');
+          background-size: cover;
+          background-position: center 56%;
+        "
+      >
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title is-2 has-text-white has-text-centered">
+              Our Events
+            </h1>
+            <p class="subtitle is-4 has-text-centered has-text-white has-text-weight-bold has-text-shadow2">Join us at our upcoming events and be part of our community</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Event cards -->
+<!-- Event cards -->
+<section class="section py-5">
+  <div class="container">
+    <div id="browseEventCards" class="columns is-multiline is-variable is-centered">
+
+      <!-- Card 1: Spring Charity Gala -->
+      <div class="column is-full px-6">
+        <div class="box event-card">
+          <div class="is-flex is-justify-content-space-between is-align-items-flex-start mb-2">
+            <div>
+              <p class="title is-4 mb-1">PSC Ramadan Iftar</p>
+              <p class="subtitle is-6 has-text-grey">Dinner event</p>
+            </div>
+            <span class="tag is-red is-rounded" style="font-weight: 600;">Culture</span>
+          </div>
+
+          <div class="mb-4">
+            <p class="mb-2">
+              <span class="icon-text">
+                <span class="icon has-text-dark"><i class="fas fa-calendar"></i></span>
+                <span>Tuesday, March 2, 2026</span>
+              </span>
+            </p>
+            <p class="mb-2">
+              <span class="icon-text">
+                <span class="icon has-text-dark"><i class="fas fa-clock"></i></span>
+                <span>5:45 PM – 7:00 PM</span>
+              </span>
+            </p>
+            <p class="mb-2">
+              <span class="icon-text">
+                <span class="icon has-text-dark"><i class="fas fa-map-marker-alt"></i></span>
+                <span>MSC Lounge, Red Gym</span>
+              </span>
+            </p>
+          </div>
+
+          <p class="mb-4 has-text-grey-dark">
+            Join us for iftar as we gather in prayer and solidarity with the people of Palestine. Food will be catered from Gyro Guyz. Everybody is welcome. Please RSVP if you intend to join us.
+          </p>
+
+          <button class="button is-green has-text-weight-bold" style="border-radius: 8px;">
+            Register for Event
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 2: Movie Screening -->
+        <div class="column is-full px-6">
+        <div class="box event-card">
+              <div class="is-flex is-justify-content-space-between is-align-items-flex-start mb-2">
+            <div>
+              <p class="title is-4 mb-1">Movie Screening - Voice of Hind Rajab</p>
+              <p class="subtitle is-6 has-text-grey">PSC and WUD Film Screening</p>
+            </div>
+            <span class="tag is-red is-rounded" style="font-weight: 600;">Cultural</span>
+          </div>
+
+          <div class="mb-4">
+            <p class="mb-2">
+              <span class="icon-text">
+                <span class="icon has-text-dark"><i class="fas fa-calendar"></i></span>
+                <span>Wednesday, March 4, 2026</span>
+              </span>
+            </p>
+            <p class="mb-2">
+              <span class="icon-text">
+                <span class="icon has-text-dark"><i class="fas fa-clock"></i></span>
+                <span>6:30 PM – 8:00 PM</span>
+              </span>
+            </p>
+            <p class="mb-2">
+              <span class="icon-text">
+                <span class="icon has-text-dark"><i class="fas fa-map-marker-alt"></i></span>
+                <span>Marquee Theater, Union South</span>
+              </span>
+            </p>
+          </div>
+
+          <p class="mb-4 has-text-grey-dark">
+            The Palestine Solidarity Committee and WUD Film are proud to present a screening of Academy Award nominated film: The Voice of Hind Rajab (2025). The movie follows volunteers at the Palestine Red Crescent Society who stay on the phone with a 6-year-old girl who gets trapped in a car in war-torn Gaza.
+          </p>
+
+          <button class="button is-green has-text-weight-bold" style="border-radius: 8px;">
+            Register for Event
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+    </main>
+
      <!-- footer -->
     <footer class="footer has-background-black p-4">
       <div class="container">
