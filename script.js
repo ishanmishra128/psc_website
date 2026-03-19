@@ -17,3 +17,27 @@ document.addEventListener("DOMContentLoaded", () => {
     form.reset();
   });
 });
+
+document
+  .querySelector(".post-comment-btn")
+  .addEventListener("click", function () {
+    const textarea = document.querySelector(".comment-textarea");
+    const text = textarea.value.trim();
+
+    if (!text) return;
+
+    const commentsContainer = document.querySelector(".comments-container");
+
+    const newComment = document.createElement("div");
+    newComment.classList.add("comment-block", "mb-3", "p-4");
+    newComment.innerHTML = `
+      <div class="is-flex is-justify-content-space-between mb-1">
+        <p class="has-text-weight-bold">You</p>
+        <p class="has-text-grey is-size-7">Just now</p>
+      </div>
+      <p>${text}</p>
+    `;
+
+    commentsContainer.appendChild(newComment);
+    textarea.value = "";
+  });
