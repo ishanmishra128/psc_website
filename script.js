@@ -1,3 +1,4 @@
+// message form
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#contactForm");
 
