@@ -9,6 +9,11 @@
   background-color: #1a1a1a;
 }
 
+/* page background color --i used this for the contact page */
+.contact-section {
+  background-color: #f8f9fa;
+}
+
 /* For text colors */
 .has-text-red {
   color: #ce1226;
@@ -61,25 +66,13 @@
   margin-bottom: 1.5rem;
   color: #c5050c;
   /* White outline using multiple text-shadows */
-  text-shadow:
-    -1px -1px 0 #ce1226,
-    1px -1px 0 #ce1226,
-    -1px 1px 0 #ce1226,
-    1px 1px 0 #ce1226,
-    0px -1px 0 #ce1226,
-    0px 1px 0 #ce1226,
-    -1px 0px 0 #ce1226,
+  text-shadow: -1px -1px 0 #ce1226, 1px -1px 0 #ce1226, -1px 1px 0 #ce1226,
+    1px 1px 0 #ce1226, 0px -1px 0 #ce1226, 0px 1px 0 #ce1226, -1px 0px 0 #ce1226,
     1px 0px 0 #ce1226;
 }
 .has-text-shadow2 {
-  text-shadow:
-    -1px -1px 0 #ce1226,
-    1px -1px 0 #ce1226,
-    -1px 1px 0 #ce1226,
-    1px 1px 0 #ce1226,
-    0px -1px 0 #ce1226,
-    0px 1px 0 #ce1226,
-    -1px 0px 0 #ce1226,
+  text-shadow: -1px -1px 0 #ce1226, 1px -1px 0 #ce1226, -1px 1px 0 #ce1226,
+    1px 1px 0 #ce1226, 0px -1px 0 #ce1226, 0px 1px 0 #ce1226, -1px 0px 0 #ce1226,
     1px 0px 0 #ce1226;
 }
 

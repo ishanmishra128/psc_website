@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,21 +6,19 @@
     <title>Palestine Solidarity Committee - Contact</title>
     <link
       href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
-    />
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
     <link rel="icon" type="image/png" href="images/psclogo_transparent.png" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
-    <!-- Custom Colors & Fonts to use -->
+    <!-- css -->
     <link rel="stylesheet" href="styles.css" />
   </head>
+
   <body>
     <!-- navbar -->
     <nav class="navbar is-white" role="navigation" aria-label="main navigation">
@@ -31,8 +29,7 @@
               <img
                 src="images/psclogo_transparent.png"
                 style="max-height: none; height: 48px; width: 48px"
-                alt="PSC Logo"
-              />
+                alt="PSC Logo" />
             </figure>
             <span class="has-text-weight-bold is-size-3">PSC</span>
           </a>
@@ -42,11 +39,10 @@
             class="navbar-burger"
             aria-label="menu"
             aria-expanded="false"
-            data-target="mainNavbar"
-          >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
+            data-target="mainNavbar">
+            <span></span>
+            <span></span>
+            <span></span>
           </a>
         </div>
 
@@ -56,60 +52,35 @@
             <div class="buttons">
               <a href="index.html">
                 <button
-                  id="navindex"
-                  class="button is-white is-size-5 has-text-weight-semibold"
-                  style="border: none"
-                >
+                  class="button is-white is-size-5 has-text-weight-semibold">
                   Home
                 </button>
               </a>
               <a href="events.html">
                 <button
-                  id="navevents"
-                  class="button is-white is-size-5 has-text-weight-semibold"
-                >
+                  class="button is-white is-size-5 has-text-weight-semibold">
                   Events
                 </button>
               </a>
               <a href="about.html">
                 <button
-                  id="navabout"
-                  class="button is-white is-size-5 has-text-weight-semibold"
-                >
+                  class="button is-white is-size-5 has-text-weight-semibold">
                   About Us
-                </button>
-              </a>
-              <a href="contact.html">
-                <button
-                  id="navcontact"
-                  class="button is-red-active is-size-5 has-text-weight-semibold"
-                >
-                  Contact
                 </button>
               </a>
             </div>
           </div>
+
           <div class="navbar-end">
             <div class="navbar-item">
               <div class="buttons">
                 <button
-                  id="navlogin"
-                  class="button is-red-active is-size-5 has-text-weight-semibold signedout"
-                >
+                  class="button is-red-active is-size-5 has-text-weight-semibold">
                   Log In
                 </button>
                 <button
-                  id="navsignup"
-                  class="button is-red-active is-size-5 has-text-weight-bold signedout border-green"
-                >
+                  class="button is-red-active is-size-5 has-text-weight-bold border-green">
                   Sign Up
-                </button>
-
-                <button
-                  id="navsignout"
-                  class="button is-red is-size-5 has-text-weight-semibold signedin is-hidden"
-                >
-                  Sign Out
                 </button>
               </div>
             </div>
@@ -118,15 +89,158 @@
       </div>
     </nav>
 
+    <!-- hero -->
+    <section
+      class="hero is-small"
+      style="
+        background-image: url('images/psc_hero2.jpg');
+        background-size: cover;
+        background-position: center;
+      ">
+      <div class="hero-body">
+        <div class="container">
+          <h1
+            class="title is-2 has-text-white has-text-centered has-text-shadow2">
+            Contact Us
+          </h1>
+          <p
+            class="subtitle is-4 has-text-centered has-text-white has-text-weight-bold has-text-shadow2">
+            Get in touch with the Palestine Solidarity Committee
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- main content-->
+    <!-- <section class="section py-5 has-background-grey-lighter"> -->
+    <section class="section contact-section">
+      <div class="container">
+        <div class="columns is-variable is-6 is-centered">
+          <!-- left section -->
+          <div class="column is-full-tablet is-6-desktop">
+            <div class="box event-card">
+              <p class="title is-4 mb-3">Send Us a Message</p>
+              <p class="mb-4 has-text-grey-dark">
+                Fill out the form below and we’ll get back to you as soon as
+                possible.
+              </p>
+
+              <!-- start of form -->
+              <form id="contactForm">
+                <!-- name -->
+                <div class="field">
+                  <label class="label">Name</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      name="name"
+                      placeholder="Your name"
+                      required />
+                  </div>
+                </div>
+
+                <!-- email -->
+                <div class="field">
+                  <label class="label">Email</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="email"
+                      name="email"
+                      placeholder="your.email@example.com"
+                      required />
+                  </div>
+                </div>
+
+                <!-- Subject -->
+                <div class="field">
+                  <label class="label">Subject</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      name="subject"
+                      placeholder="What is this regarding?" />
+                  </div>
+                </div>
+
+                <!-- message -->
+                <div class="field">
+                  <label class="label">Message</label>
+                  <div class="control">
+                    <textarea
+                      class="textarea"
+                      name="message"
+                      rows="5"
+                      placeholder="Your message..."
+                      required></textarea>
+                  </div>
+                </div>
+
+                <!-- Send Message button -->
+                <button
+                  type="submit"
+                  class="button is-green is-fullwidth has-text-weight-bold"
+                  style="border-radius: 8px">
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- rigth section, contact info -->
+          <div class="column is-full-tablet is-6-desktop">
+            <div class="box event-card mb-5">
+              <p class="title is-5 mb-2">
+                <span class="icon has-text-green mr-2">
+                  <i class="fa fa-envelope"></i>
+                </span>
+                Email
+              </p>
+              <p class="has-text-grey-dark ml-5">psc@wisc.edu</p>
+            </div>
+
+            <div class="box event-card mb-5">
+              <p class="title is-5 mb-2">
+                <span class="icon has-text-green mr-2">
+                  <i class="fa fa-map-marker"></i>
+                </span>
+                Location
+              </p>
+
+              <p class="has-text-grey-dark ml-5">
+                University of Wisconsin–Madison<br />
+                Student Organizations Office
+              </p>
+            </div>
+
+            <div class="box event-card">
+              <p class="title is-5 mb-2">
+                <span class="icon has-text-green mr-2">
+                  <i class="fa fa-users"></i>
+                </span>
+                Follow Us
+              </p>
+              <p class="has-text-grey-dark ml-5">
+                Stay connected with us on social media for updates and
+                announcements
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- footer -->
     <footer class="footer has-background-black p-4">
       <div class="container">
         <div class="level is-mobile">
           <div class="level-left">
             <div class="level-item">
-              <span class="has-text-white is-size-6"
-                >© 2026 Palestine Solidarity Committee</span
-              >
+              <span class="has-text-white is-size-6">
+                © 2026 Palestine Solidarity Committee
+              </span>
             </div>
           </div>
 
@@ -134,18 +248,16 @@
             <div class="level-item">
               <div class="buttons">
                 <a href="contact.html">
-                  <button
-                    id="navcontact"
-                    class="button is-black"
-                  >
+                  <button id="navcontact" class="button is-black">
                     Contact
                   </button>
                 </a>
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </footer></body>
+    </footer>
+    <script src="script.js"></script>
+  </body>
 </html>
