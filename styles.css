@@ -93,9 +93,27 @@
 }
 
 footer {
+  border-top: 3px solid #00843d;
   margin-top: auto; /* Pushes the footer to the bottom */
   padding: 10px 0;
 }
+
+/* centering links in footer */
+.footer .level-left,
+.footer .level-right,
+.footer .level-item:not(.level-left .level-item):not(.level-right .level-item) {
+  flex: 1;
+  justify-content: center;
+}
+
+.footer .level-left {
+  justify-content: flex-start;
+}
+
+.footer .level-right {
+  justify-content: flex-end;
+}
+
 .event-card {
   border: 1.5px solid #48c774;
   border-radius: 12px;
@@ -130,4 +148,8 @@ a.box.contact-card:visited {
   object-fit: cover;
   object-position: center;
   border-radius: 8px;
+}
+
+.columns.is-variable .box.event-card {
+  height: 100%;
 }
