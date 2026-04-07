@@ -358,6 +358,28 @@
         </div>
       </div>
     </footer>
+        <script>
+      // TODO
+        const firebaseConfig = {
+        apiKey: "AIzaSyDjrkor7dIGsOfblg7pA-j2_sQjk66o8eY",
+        authDomain: "uw-psc.firebaseapp.com",
+        projectId: "uw-psc",
+        storageBucket: "uw-psc.firebasestorage.app",
+        messagingSenderId: "909858577066",
+        appId: "1:909858577066:web:1c6ec24fe22a0723270ed3",
+        measurementId: "G-ZP2TEXSHWT"
+      };
+      // Your web app's Firebase configuration
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      // define authentication variable
+      let auth = firebase.auth();
+      let db = firebase.firestore();
+
+      // define a storage reference
+      let ref = firebase.storage().ref();
+    </script>
     <script src="script.js"></script>
   </body>
 </html>
