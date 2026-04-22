@@ -54,56 +54,53 @@
         </div>
 
         <div id="mainNavbar" class="navbar-menu">
-          <div class="navbar-start"></div>
-          <div class="navbar-item">
-            <div class="buttons">
-              <a href="index.html">
-                <button
-                  id="navindex"
-                  class="navbar-item button is-white is-size-5 has-text-weight-semibold"
-                  style="border: none"
-                >
-                  Home
-                </button>
-              </a>
-              <a href="events.html">
-                <button
-                  id="navevents"
-                  class="navbar-item button is-white is-size-5 has-text-weight-semibold"
-                >
-                  Events
-                </button>
-              </a>
-              <a href="about.html">
-                <button
-                  id="navabout"
-                  class="navbar-item button is-white is-size-5 has-text-weight-semibold"
-                >
-                  About Us
-                </button>
-              </a>
-              <a href="contact.html">
-                <button
-                  id="navcontact"
-                  class="navbar-item button is-red-active is-size-5 has-text-weight-semibold"
-                >
-                  Contact
-                </button>
-              </a>
-            </div>
+          <div class="navbar-start">
+            <a href="index.html" class="navbar-item">
+              <button
+                id="navindex"
+                class="button is-white is-size-5 has-text-weight-semibold"
+                style="border: none"
+              >
+                Home
+              </button>
+            </a>
+            <a href="events.html" class="navbar-item">
+              <button
+                id="navevents"
+                class="button is-white is-size-5 has-text-weight-semibold"
+              >
+                Events
+              </button>
+            </a>
+            <a href="about.html" class="navbar-item">
+              <button
+                id="navabout"
+                class="button is-white is-size-5 has-text-weight-semibold"
+              >
+                About Us
+              </button>
+            </a>
+            <a href="contact.html" class="navbar-item">
+              <button
+                id="navcontact"
+                class="button is-red-active is-size-5 has-text-weight-semibold"
+              >
+                Contact
+              </button>
+            </a>
           </div>
           <div class="navbar-end">
             <div class="navbar-item">
               <div id="navAuthBtns">
                 <button
                   id="openLoginModal"
-                  class="navbar-item button is-red-active is-size-5 has-text-weight-semibold"
+                  class="button is-red-active is-size-5 has-text-weight-semibold"
                 >
                   Log In
                 </button>
                 <button
                   id="openSignupModal"
-                  class="navbar-item button is-red-active is-size-5 has-text-weight-semibold"
+                  class="button is-red-active is-size-5 has-text-weight-semibold"
                 >
                   Sign Up
                 </button>
@@ -111,8 +108,14 @@
               <div id="navUserInfo">
                 <span id="navWelcome"></span>
                 <button
+                  id="openAdminModal"
+                  class="button is-success is-size-5 has-text-weight-semibold admin-only"
+                >
+                  + Add Event
+                </button>
+                <button
                   id="logoutBtn"
-                  class="navbar-item button is-red-active is-size-5 has-text-weight-semibold"
+                  class="button is-red-active is-size-5 has-text-weight-semibold"
                 >
                   Log Out
                 </button>
