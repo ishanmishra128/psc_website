@@ -336,6 +336,10 @@ function buildEventCard(doc, showComments = true) {
       <button class="button is-green has-text-weight-bold register-btn" style="border-radius: 8px;" data-event-id="${eventId}">
         Register for Event
       </button>
+      <button class="button is-link has-text-weight-bold admin-only view-rsvp-btn mt-2" 
+        style="border-radius: 8px;" data-event-id="${eventId}" data-event-title="${escapeHtml(e.event_title)}">
+        View RSVPs
+      </button>
       ${commentsSection}
     </div>
   `;
@@ -462,6 +466,80 @@ function attachButtonListeners() {
       }
     });
   });
+  // ── View RSVPs (admin only) ──────────────────────────────────────────────────
+  document.querySelectorAll(".view-rsvp-btn").forEach((btn) => {
+    const fresh = btn.cloneNode(true);
+    btn.replaceWith(fresh);
+    fresh.addEventListener("click", async function () {
+      const eventId = fresh.dataset.eventId;
+      const eventTitle = fresh.dataset.eventTitle;
+
+      // Set modal title
+      document.getElementById("rsvpModalTitle").textContent =
+        `RSVPs — ${eventTitle}`;
+
+      const list = document.getElementById("rsvpList");
+      list.innerHTML = `<p class="has-text-grey has-text-centered">Loading...</p>`;
+      openModal("rsvpModal");
+
+      try {
+        const docSnap = await db.collection("events").doc(eventId).get();
+        const registration = docSnap.data()?.registration || [];
+
+        if (registration.length === 0) {
+          list.innerHTML = `<p class="has-text-grey has-text-centered">No RSVPs yet.</p>`;
+          return;
+        }
+
+        // Sort by rsvp_time ascending
+        const sorted = [...registration].sort((a, b) => {
+          return (
+            (a.rsvp_time?.toMillis?.() || 0) - (b.rsvp_time?.toMillis?.() || 0)
+          );
+        });
+
+        list.innerHTML = "";
+        sorted.forEach((r, i) => {
+          const ts = r.rsvp_time?.toDate?.();
+          const dateStr = ts
+            ? ts.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })
+            : "Unknown";
+          const timeStr = ts
+            ? ts.toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+              })
+            : "";
+
+          const row = document.createElement("div");
+          row.classList.add("mb-3", "p-4");
+          row.style.cssText =
+            "background-color: #f5f5f5; border-left: 4px solid #00843d; border-radius: 4px;";
+          row.innerHTML = `
+          <div class="is-flex is-justify-content-space-between is-align-items-center">
+            <div>
+              <p class="has-text-weight-bold">${i + 1}. ${escapeHtml(r.user_name || "Unknown")}</p>
+              <p class="has-text-grey is-size-7">${escapeHtml(r.user_email || "")}</p>
+            </div>
+            <p class="has-text-grey is-size-7">${dateStr} at ${timeStr}</p>
+          </div>
+        `;
+          list.appendChild(row);
+        });
+
+        // Show total count
+        document.getElementById("rsvpCount").textContent =
+          `${registration.length} registered`;
+      } catch (err) {
+        console.error("Error loading RSVPs:", err);
+        list.innerHTML = `<p class="has-text-danger has-text-centered">Error loading RSVPs.</p>`;
+      }
+    });
+  });
 }
 // ── Handle RSVP ───────────────────────────────────────────────────────────────
 async function handleRsvp(btn) {
@@ -574,6 +652,13 @@ document.getElementById("closeAdminModal")?.addEventListener("click", () => {
 });
 document.getElementById("cancelAdminEvent")?.addEventListener("click", () => {
   closeModal("adminEventModal");
+});
+
+document.getElementById("closeRsvpModal")?.addEventListener("click", () => {
+  closeModal("rsvpModal");
+});
+document.getElementById("cancelRsvpModal")?.addEventListener("click", () => {
+  closeModal("rsvpModal");
 });
 
 // end DOMContentLoaded
