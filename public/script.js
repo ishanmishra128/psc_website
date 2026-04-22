@@ -38,6 +38,8 @@ auth.onAuthStateChanged((user) => {
     // Show signed-out comment state
     showSignedOutCommentState();
   }
+  loadEvents();
+  loadNextEvent();
 });
 
 // Modal Helpers
@@ -54,6 +56,8 @@ function clearError(id) {
 
 // DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
+  loadEvents();
+  loadNextEvent();
   // Open Modals
   document.getElementById("openLoginModal")?.addEventListener("click", () => {
     clearError("loginError");
@@ -229,32 +233,216 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+});
+// ── Category tag color helper ─────────────────────────────────────────────────
+function getCategoryTagClass(category) {
+  const map = {
+    community: "is-red",
+    cultural: "is-info",
+    planning: "is-warning",
+    educational: "is-link",
+  };
+  return map[(category || "").toLowerCase()] || "is-dark";
+}
+// ── Format date helpers ───────────────────────────────────────────────────────
+function formatDate(ts) {
+  if (!ts) return "TBD";
+  const d = ts.toDate();
+  return d.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+function formatTime(ts) {
+  if (!ts) return "";
+  return ts
+    .toDate()
+    .toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+}
+// ── Build a single event card (with or without comments section) ──────────────
+function buildEventCard(doc, showComments = true) {
+  const e = doc.data();
+  const eventId = doc.id;
+  const start = e.event_datetime?.start_time;
+  const end = e.event_datetime?.end_time;
+  const tagClass = getCategoryTagClass(e.event_category);
+  const commentsSection = showComments
+    ? `
+    <hr>
+    <div class="mt-4 event-card-comments" data-event-id="${eventId}">
+      <p class="title is-5 mb-4">
+        <span class="icon has-text-green mr-1"><i class="fas fa-comment"></i></span>
+        Comments (<span class="comment-count">0</span>)
+      </p>
+      <div class="commentscontainer"></div>
+      <div class="mt-5 comments-section">
+        <p class="title is-6 mb-3">Leave a Comment</p>
+        <div class="field">
+          <div class="control">
+            <textarea class="textarea commenttextarea" placeholder="Write your comment here..." rows="3"></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-green has-text-weight-bold postcommentbtn post-comment-btn" style="border-radius: 8px;">
+              Post Comment
+            </button>
+          </div>
+        </div>
+      </div>
+  `
+    : "";
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("column", "is-full", "px-6");
+  wrapper.innerHTML = `
+    <div class="box event-card">
+      <div class="is-flex is-justify-content-space-between is-align-items-flex-start mb-2">
+        <div>
+          <p class="title is-4 mb-1">${escapeHtml(e.event_title)}</p>
+          <p class="subtitle is-6 has-text-grey">${escapeHtml(e.event_subtitle || "")}</p>
+        </div>
+        <span class="tag ${tagClass} is-rounded" style="font-weight: 600;">${escapeHtml(e.event_category || "")}</span>
+      </div>
+      <div class="mb-4">
+        <p class="mb-2">
+          <span class="icon-text">
+            <span class="icon has-text-green"><i class="fas fa-calendar"></i></span>
+            <span>${formatDate(start)}</span>
+          </span>
+        </p>
+        <p class="mb-2">
+          <span class="icon-text">
+            <span class="icon has-text-green"><i class="fas fa-clock"></i></span>
+            <span>${formatTime(start)} – ${formatTime(end)}</span>
+          </span>
+        </p>
+        <p class="mb-2">
+          <span class="icon-text">
+            <span class="icon has-text-green"><i class="fas fa-map-marker-alt"></i></span>
+            <span>${escapeHtml(e.event_location || "")}</span>
+          </span>
+        </p>
+      </div>
+      <p class="mb-4 has-text-grey-dark">${escapeHtml(e.event_description || "")}</p>
+      <button class="button is-green has-text-weight-bold register-btn" style="border-radius: 8px;" data-event-id="${eventId}">
+        Register for Event
+      </button>
+      ${commentsSection}
+    </div>
+  `;
+  return wrapper;
+}
+// ── Load all events — events.html ─────────────────────────────────────────────
+function loadEvents() {
+  const container = document.getElementById("eventsContainer");
+  if (!container) return;
+  db.collection("events")
+    .orderBy("event_datetime.start_time", "asc")
+    .onSnapshot((snapshot) => {
+      container.innerHTML = "";
+      if (snapshot.empty) {
+        container.innerHTML = `
+        <div class="column is-full px-6 has-text-centered py-6">
+          <span class="icon is-large has-text-grey mb-3"><i class="fas fa-calendar-times fa-2x"></i></span>
+          <p class="title is-5 has-text-grey">No Upcoming Events</p>
+          <p class="has-text-grey-light">Check back soon — more events are on the way!</p>
+        </div>
+      `;
+        return;
+      }
+      snapshot.forEach((doc) => {
+        container.appendChild(buildEventCard(doc, true));
+      });
+      // Re-attach listeners after DOM is rebuilt
+      attachButtonListeners();
+      syncRsvpButtonStates();
+      loadAllComments();
+      if (auth.currentUser) loadAllComments();
+    });
+}
+// ── Load next upcoming event only — index.html ────────────────────────────────
+function loadNextEvent() {
+  const container = document.getElementById("nextEventContainer");
+  if (!container) return;
+  const now = new Date();
+  db.collection("events")
+    .orderBy("event_datetime.start_time", "asc")
+    .get()
+    .then((snapshot) => {
+      container.innerHTML = "";
+      let nextDoc = null;
+      snapshot.forEach((doc) => {
+        if (!nextDoc) {
+          const start = doc.data().event_datetime?.start_time?.toDate();
+          if (start && start >= now) nextDoc = doc;
+        }
+      });
+      if (!nextDoc) {
+        container.innerHTML = `
+        <div class="column is-full px-6 has-text-centered py-6">
+          <span class="icon is-large has-text-grey mb-3"><i class="fas fa-calendar-times fa-2x"></i></span>
+          <p class="title is-5 has-text-grey">No Upcoming Events</p>
+          <p class="has-text-grey-light">Check back soon — more events are on the way!</p>
+        </div>
+      `;
+        return;
+      }
+      // showComments = false for homepage
+      container.appendChild(buildEventCard(nextDoc, false));
+      attachButtonListeners();
+    })
+    .catch((err) => console.error("Error loading next event:", err));
+}
+// ── Re-attach register + comment intercept listeners ─────────────────────────
+function attachButtonListeners() {
+  // ── Register / RSVP ──────────────────────────────────────────────────────
+  document.querySelectorAll(".register-btn").forEach((btn) => {
+    const fresh = btn.cloneNode(true);
+    btn.replaceWith(fresh);
+    fresh.addEventListener("click", function (e) {
+      if (!auth.currentUser) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        openModal("loginModal");
+      } else {
+        handleRsvp(fresh);
+      }
+    });
+  });
 
-  //  Post Comment
-  // Comments stored as an array inside the event document
+  // ── Post Comment ─────────────────────────────────────────────────────────
   document.querySelectorAll(".postcommentbtn").forEach((btn) => {
-    btn.addEventListener("click", async function () {
-      const user = auth.currentUser;
-      if (!user) return;
+    const fresh = btn.cloneNode(true);
+    btn.replaceWith(fresh);
+    fresh.addEventListener("click", async function (e) {
+      // If logged out — open login modal
+      if (!auth.currentUser) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        openModal("loginModal");
+        return;
+      }
 
-      const card = btn.closest(".event-card-comments");
+      // If logged in — post the comment
+      const user = auth.currentUser;
+      const card = fresh.closest(".event-card-comments");
       const eventId = card?.dataset.eventId;
       const textarea = card?.querySelector(".commenttextarea");
       const text = textarea?.value.trim();
 
       if (!text || !eventId) return;
 
-      // Build comment map matching your schema exactly
       const newComment = {
         comment_id: generateId(),
         name: user.displayName || "Anonymous",
         user_id: user.uid,
         text: text,
-        "created-at": firebase.firestore.FieldValue.serverTimestamp(),
+        "created-at": firebase.firestore.Timestamp.now(),
       };
 
       try {
-        // arrayUnion appends to the comments array in the event document
         await db
           .collection("events")
           .doc(eventId)
@@ -267,7 +455,50 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-}); // end DOMContentLoaded
+}
+// ── Handle RSVP ───────────────────────────────────────────────────────────────
+async function handleRsvp(btn) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const eventId = btn.dataset.eventId;
+  if (!eventId) return;
+
+  try {
+    const docRef = db.collection("events").doc(eventId);
+    const docSnap = await docRef.get();
+    const registration = docSnap.data()?.registration || [];
+
+    const alreadyRsvpd = registration.some((r) => r.user_id === user.uid);
+
+    if (alreadyRsvpd) {
+      // ── Un-RSVP ───────────────────────────────────────────────────────
+      const updated = registration.filter((r) => r.user_id !== user.uid);
+      await docRef.update({ registration: updated });
+      btn.textContent = "Register for Event";
+      btn.classList.remove("is-light");
+      btn.classList.add("is-green");
+      btn.disabled = false;
+    } else {
+      // ── RSVP ──────────────────────────────────────────────────────────
+      const rsvpEntry = {
+        user_id: user.uid,
+        user_email: user.email,
+        user_name: user.displayName || "Anonymous",
+        rsvp_time: firebase.firestore.Timestamp.now(),
+      };
+      await docRef.update({
+        registration: firebase.firestore.FieldValue.arrayUnion(rsvpEntry),
+      });
+      btn.textContent = "Registered. (Click to cancel)";
+      btn.classList.remove("is-green");
+      btn.classList.add("is-light");
+    }
+  } catch (err) {
+    console.error("RSVP error:", err);
+  }
+}
+// end DOMContentLoaded
 
 // Load Comments from Firestore
 // Comments live as an array inside the event document (not a subcollection)
@@ -304,9 +535,9 @@ function loadAllComments() {
         if (commentCount) commentCount.textContent = comments.length;
 
         // Sort by created-at ascending (note the hyphen in your schema)
-        const sorted = comments.slice().sort((a, b) => {
-          const aTime = a["created-at"]?.toMillis?.() ?? 0;
-          const bTime = b["created-at"]?.toMillis?.() ?? 0;
+        const sorted = [...comments].sort((a, b) => {
+          const aTime = a["created-at"]?.toMillis?.() || 0;
+          const bTime = b["created-at"]?.toMillis?.() || 0;
           return aTime - bTime;
         });
 
@@ -320,14 +551,46 @@ function loadAllComments() {
               })
             : "Just now";
 
+          const isOwner = auth.currentUser?.uid === comment.user_id;
+
           const block = document.createElement("div");
-          block.classList.add("commentblock", "mb-3", "p-4");
+          block.classList.add("mb-3", "p-4");
+          block.style.cssText =
+            "background-color: #f5f5f5; border-left: 4px solid #00843d; border-radius: 4px;";
           block.innerHTML = `
             <div class="is-flex is-justify-content-space-between mb-1">
               <p class="has-text-weight-bold">${escapeHtml(comment.name)}</p>
-              <p class="has-text-grey is-size-7">${dateStr}</p>
+              <div class="is-flex is-align-items-center" style="gap: 0.5rem;">
+                <p class="has-text-grey is-size-7">${dateStr}</p>
+                ${isOwner ? `<button class="delete is-small delete-comment-btn" data-comment-id="${comment.comment_id}" data-event-id="${eventId}" title="Delete comment"></button>` : ""}
+              </div>
             </div>
-            <p>${escapeHtml(comment.text)}</p>`;
+            <p>${escapeHtml(comment.text)}</p>
+          `;
+
+          // Attach delete listener if owner
+          if (isOwner) {
+            block
+              .querySelector(".delete-comment-btn")
+              ?.addEventListener("click", async function () {
+                const cId = this.dataset.commentId;
+                const eId = this.dataset.eventId;
+                if (!confirm("Delete this comment?")) return;
+
+                try {
+                  const docRef = db.collection("events").doc(eId);
+                  const docSnap = await docRef.get();
+                  const existingComments = docSnap.data()?.comments || [];
+                  const updated = existingComments.filter(
+                    (c) => c.comment_id !== cId,
+                  );
+                  await docRef.update({ comments: updated });
+                } catch (err) {
+                  console.error("Error deleting comment:", err);
+                }
+              });
+          }
+
           commentsContainer.appendChild(block);
         });
       });
@@ -370,4 +633,27 @@ function friendlyAuthError(code) {
     "auth/invalid-credential": "Invalid email or password.",
   };
   return map[code] || "Something went wrong. Please try again.";
+}
+
+function syncRsvpButtonStates() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  document
+    .querySelectorAll(".register-btn[data-event-id]")
+    .forEach(async (btn) => {
+      const eventId = btn.dataset.eventId;
+      try {
+        const docSnap = await db.collection("events").doc(eventId).get();
+        const registration = docSnap.data()?.registration || [];
+        const alreadyRsvpd = registration.some((r) => r.user_id === user.uid);
+        if (alreadyRsvpd) {
+          btn.textContent = "Registered ✓ (click to cancel)";
+          btn.classList.remove("is-green");
+          btn.classList.add("is-light");
+        }
+      } catch (err) {
+        console.error("Error syncing RSVP state:", err);
+      }
+    });
 }
