@@ -34,7 +34,9 @@
                 alt="PSC Logo"
               />
             </figure>
-            <span class="has-text-weight-bold is-size-3">PSC</span>
+            <span class="has-text-weight-bold is-size-3 has-text-shadow"
+              >PSC</span
+            >
           </a>
 
           <a
@@ -79,7 +81,6 @@
                   About Us
                 </button>
               </a>
-              <!-- contact button added -->
               <a href="contact.html">
                 <button
                   id="navcontact"
@@ -92,25 +93,27 @@
           </div>
           <div class="navbar-end">
             <div class="navbar-item">
-              <div class="buttons">
+              <div id="navAuthBtns">
                 <button
-                  id="navlogin"
-                  class="button is-red-active is-size-5 has-text-weight-semibold signedout"
+                  id="openLoginModal"
+                  class="button is-red-active is-size-5 has-text-weight-semibold"
                 >
                   Log In
                 </button>
                 <button
-                  id="navsignup"
-                  class="button is-red-active is-size-5 has-text-weight-bold signedout border-green"
+                  id="openSignupModal"
+                  class="button is-red-active is-size-5 has-text-weight-semibold"
                 >
                   Sign Up
                 </button>
-
+              </div>
+              <div id="navUserInfo">
+                <span id="navWelcome"></span>
                 <button
-                  id="navsignout"
-                  class="button is-red-active is-size-5 has-text-weight-semibold signedin is-hidden"
+                  id="logoutBtn"
+                  class="button is-red-active is-size-5 has-text-weight-semibold"
                 >
-                  Sign Out
+                  Log Out
                 </button>
               </div>
             </div>
@@ -317,28 +320,132 @@
         </div>
       </div>
     </footer>
-    <script>
-      // TODO
-      const firebaseConfig = {
-        apiKey: "AIzaSyDjrkor7dIGsOfblg7pA-j2_sQjk66o8eY",
-        authDomain: "uw-psc.firebaseapp.com",
-        projectId: "uw-psc",
-        storageBucket: "uw-psc.firebasestorage.app",
-        messagingSenderId: "909858577066",
-        appId: "1:909858577066:web:1c6ec24fe22a0723270ed3",
-        measurementId: "G-ZP2TEXSHWT",
-      };
-      // Your web app's Firebase configuration
 
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      // define authentication variable
-      let auth = firebase.auth();
-      let db = firebase.firestore();
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
-      // define a storage reference
-      let ref = firebase.storage().ref();
-    </script>
+    <!-- Login modal -->
+    <div class="modal" id="loginModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head has-background-black">
+          <p class="modal-card-title">Log In</p>
+          <button
+            class="delete"
+            id="closeLoginModal"
+            aria-label="close"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left">
+              <input
+                class="input"
+                type="email"
+                id="loginEmail"
+                placeholder="netid@wisc.edu"
+              />
+              <span class="icon is-left"><i class="fas fa-envelope"></i></span>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control has-icons-left">
+              <input
+                class="input"
+                type="password"
+                id="loginPassword"
+                placeholder="Password"
+              />
+              <span class="icon is-left"><i class="fas fa-lock"></i></span>
+            </div>
+          </div>
+          <p class="has-text-danger is-size-7 mt-2" id="loginError"></p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-green" id="loginSubmit">Log In</button>
+          <button class="button" id="cancelLogin">Cancel</button>
+        </footer>
+      </div>
+    </div>
+    <!-- Sign up modal -->
+    <div class="modal" id="signupModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head has-background-black">
+          <p class="modal-card-title">Sign Up</p>
+          <button
+            class="delete"
+            id="closeSignupModal"
+            aria-label="close"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <label class="label">First Name</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    id="signupFirstName"
+                    placeholder="First Name"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <label class="label">Last Name</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    id="signupLastName"
+                    placeholder="Last Name"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left">
+              <input
+                class="input"
+                type="email"
+                id="signupEmail"
+                placeholder="netid@wisc.edu"
+              />
+              <span class="icon is-left"><i class="fas fa-envelope"></i></span>
+            </div>
+            <p class="help">
+              Must be a <strong>@wisc.edu</strong> email address.
+            </p>
+          </div>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control has-icons-left">
+              <input
+                class="input"
+                type="password"
+                id="signupPassword"
+                placeholder="Minimum 6 characters"
+              />
+              <span class="icon is-left"><i class="fas fa-lock"></i></span>
+            </div>
+          </div>
+          <p class="has-text-danger is-size-7 mt-2" id="signupError"></p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-green" id="signupSubmit">Sign Up</button>
+          <button class="button" id="cancelSignup">Cancel</button>
+        </footer>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
