@@ -98,6 +98,23 @@ document.addEventListener("DOMContentLoaded", () => {
     ?.querySelector(".modal-background")
     ?.addEventListener("click", () => closeModal("signupModal"));
 
+  // ── Hamburger menu toggle ────────────────────────────────────────────────────
+  const burger = document.querySelector(".navbar-burger");
+  const menu = document.getElementById("mainNavbar");
+  burger?.addEventListener("click", () => {
+    burger.classList.toggle("is-active");
+    menu.classList.toggle("is-active");
+  });
+  // Close menu when a nav link is clicked
+  document
+    .querySelectorAll("#mainNavbar a, #mainNavbar button")
+    .forEach((el) => {
+      el.addEventListener("click", () => {
+        burger.classList.remove("is-active");
+        menu.classList.remove("is-active");
+      });
+    });
+
   // Log In
   document
     .getElementById("loginSubmit")

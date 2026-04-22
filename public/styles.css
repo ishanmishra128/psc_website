@@ -237,3 +237,27 @@ body.is-signed-in .post-comment-btn {
 body.is-admin .admin-only {
   display: inline-flex !important;
 }
+
+/* Stack auth buttons vertically on mobile */
+@media screen and (max-width: 1023px) {
+  #navAuthBtns,
+  #navUserInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+  }
+
+  #navAuthBtns .button,
+  #navUserInfo .button {
+    width: 100%;
+  }
+
+  #navWelcome {
+    display: block;
+    padding-bottom: 0.25rem;
+    font-weight: 600;
+  }
+}
