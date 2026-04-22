@@ -228,3 +228,12 @@ body.is-signed-in .post-comment-btn {
   opacity: 1;
   cursor: pointer;
 }
+
+/* Hide admin-only elements by default */
+.admin-only {
+  display: none !important;
+}
+/* Show when body has is-admin class */
+body.is-admin .admin-only {
+  display: inline-flex !important;
+}

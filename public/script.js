@@ -14,32 +14,39 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 // Auth State Observer
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async (user) => {
   const navWelcome = document.getElementById("navWelcome");
   const navUserInfo = document.getElementById("navUserInfo");
   const navAuthBtns = document.getElementById("navAuthBtns");
 
   if (user) {
-    // Add signed-in class to body — CSS handles all visibility
     document.body.classList.add("is-signed-in");
 
-    // Show welcome name
+    // Fetch role from Firestore
+    const userDoc = await db.collection("users").doc(user.uid).get();
+    const role = userDoc.data()?.role || "Member";
+
+    if (role === "Admin") {
+      document.body.classList.add("is-admin");
+    } else {
+      document.body.classList.remove("is-admin");
+    }
+
     if (navWelcome) {
       const firstName = (user.displayName || "User").split(" ")[0];
       navWelcome.textContent = `Welcome, ${firstName}`;
     }
 
-    // Load comments if on events page
     loadAllComments();
+    loadEvents();
+    loadNextEvent();
   } else {
-    // Remove signed-in class — CSS hides signed-in elements automatically
     document.body.classList.remove("is-signed-in");
-
-    // Show signed-out comment state
+    document.body.classList.remove("is-admin");
     showSignedOutCommentState();
+    loadEvents();
+    loadNextEvent();
   }
-  loadEvents();
-  loadNextEvent();
 });
 
 // Modal Helpers
@@ -498,6 +505,77 @@ async function handleRsvp(btn) {
     console.error("RSVP error:", err);
   }
 }
+
+// ── Admin: Create Event ──────────────────────────────────────────────────────
+document
+  .getElementById("adminEventSubmit")
+  ?.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    const title = document.getElementById("adminEventTitle").value.trim();
+    const subtitle = document.getElementById("adminEventSubtitle").value.trim();
+    const category = document.getElementById("adminEventCategory").value.trim();
+    const location = document.getElementById("adminEventLocation").value.trim();
+    const desc = document.getElementById("adminEventDesc").value.trim();
+    const startVal = document.getElementById("adminEventStart").value;
+    const endVal = document.getElementById("adminEventEnd").value;
+    const errorEl = document.getElementById("adminEventError");
+    if (!title || !category || !location || !desc || !startVal || !endVal) {
+      errorEl.textContent = "Please fill in all required fields.";
+      return;
+    }
+    const startTs = firebase.firestore.Timestamp.fromDate(new Date(startVal));
+    const endTs = firebase.firestore.Timestamp.fromDate(new Date(endVal));
+    // Get display name from Firestore
+    const userDoc = await db.collection("users").doc(user.uid).get();
+    const firstName =
+      userDoc.data()?.Name?.First || user.displayName || "Admin";
+    try {
+      await db.collection("events").add({
+        event_title: title,
+        event_subtitle: subtitle,
+        event_category: category,
+        event_location: location,
+        event_description: desc,
+        event_created_by: firstName,
+        event_datetime: {
+          start_time: startTs,
+          end_time: endTs,
+        },
+        created_at: firebase.firestore.Timestamp.now(),
+        comments: [],
+        registration: [],
+      });
+      closeModal("adminEventModal");
+      // Clear form
+      [
+        "adminEventTitle",
+        "adminEventSubtitle",
+        "adminEventCategory",
+        "adminEventLocation",
+        "adminEventDesc",
+        "adminEventStart",
+        "adminEventEnd",
+      ].forEach((id) => {
+        document.getElementById(id).value = "";
+      });
+      errorEl.textContent = "";
+    } catch (err) {
+      console.error("Error creating event:", err);
+      errorEl.textContent = "Error creating event. Please try again.";
+    }
+  });
+// ── Open Admin Modal ─────────────────────────────────────────────────────────
+document.getElementById("openAdminModal")?.addEventListener("click", () => {
+  openModal("adminEventModal");
+});
+document.getElementById("closeAdminModal")?.addEventListener("click", () => {
+  closeModal("adminEventModal");
+});
+document.getElementById("cancelAdminEvent")?.addEventListener("click", () => {
+  closeModal("adminEventModal");
+});
+
 // end DOMContentLoaded
 
 // Load Comments from Firestore
@@ -551,7 +629,10 @@ function loadAllComments() {
               })
             : "Just now";
 
+          // All users can delete their own comments; Admins can delete any comment
           const isOwner = auth.currentUser?.uid === comment.user_id;
+          const isAdmin = document.body.classList.contains("is-admin");
+          const canDelete = isOwner || isAdmin;
 
           const block = document.createElement("div");
           block.classList.add("mb-3", "p-4");
@@ -562,14 +643,14 @@ function loadAllComments() {
               <p class="has-text-weight-bold">${escapeHtml(comment.name)}</p>
               <div class="is-flex is-align-items-center" style="gap: 0.5rem;">
                 <p class="has-text-grey is-size-7">${dateStr}</p>
-                ${isOwner ? `<button class="delete is-small delete-comment-btn" data-comment-id="${comment.comment_id}" data-event-id="${eventId}" title="Delete comment"></button>` : ""}
+                ${canDelete ? `<button class="delete is-small delete-comment-btn" data-comment-id="${comment.comment_id}" data-event-id="${eventId}" title="Delete comment"></button>` : ""}
               </div>
             </div>
             <p>${escapeHtml(comment.text)}</p>
           `;
 
           // Attach delete listener if owner
-          if (isOwner) {
+          if (canDelete) {
             block
               .querySelector(".delete-comment-btn")
               ?.addEventListener("click", async function () {

@@ -293,6 +293,85 @@
     </footer>
   </div>
 </div>
+<!-- Admin: Create Event Modal -->
+<div class="modal" id="adminEventModal">
+  <div class="modal-background"></div>
+  <div class="modal-card" style="max-width: 600px; width: 90%;">
+    <header class="modal-card-head has-background-black">
+      <p class="modal-card-title has-text-white">Create New Event</p>
+      <button class="delete" id="closeAdminModal" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+
+      <div class="field">
+        <label class="label">Event Title *</label>
+        <div class="control">
+          <input class="input" type="text" id="adminEventTitle" placeholder="e.g. PSC Ramadan Iftar">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Subtitle</label>
+        <div class="control">
+          <input class="input" type="text" id="adminEventSubtitle" placeholder="e.g. Dinner event">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Category *</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="adminEventCategory">
+              <option value="">Select a category</option>
+              <option value="Community">Community</option>
+              <option value="Cultural">Cultural</option>
+              <option value="Educational">Educational</option>
+              <option value="Planning">Planning</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Location *</label>
+        <div class="control">
+          <input class="input" type="text" id="adminEventLocation" placeholder="e.g. MSC Lounge, Red Gym">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Start Date & Time *</label>
+        <div class="control">
+          <input class="input" type="datetime-local" id="adminEventStart">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">End Date & Time *</label>
+        <div class="control">
+          <input class="input" type="datetime-local" id="adminEventEnd">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Description *</label>
+        <div class="control">
+          <textarea class="textarea" id="adminEventDesc" rows="4"
+            placeholder="Describe the event..."></textarea>
+        </div>
+      </div>
+
+      <p class="has-text-danger is-size-7" id="adminEventError"></p>
+
+    </section>
+    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem;">
+      <button class="button" id="cancelAdminEvent">Cancel</button>
+      <button class="button is-green has-text-weight-bold" id="adminEventSubmit">
+        Create Event
+      </button>
+    </footer>
+  </div>
+</div>
 
     <script src="script.js"></script>
   </body>
