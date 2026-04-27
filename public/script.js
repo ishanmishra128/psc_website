@@ -357,6 +357,10 @@ function buildEventCard(doc, showComments = true) {
         style="border-radius: 8px;" data-event-id="${eventId}" data-event-title="${escapeHtml(e.event_title)}">
         View RSVPs
       </button>
+      <button class="button is-danger has-text-weight-bold admin-only delete-event-btn mt-2"
+        style="border-radius: 8px;" data-event-id="${eventId}">
+        Delete Event
+      </button>
       ${commentsSection}
     </div>
   `;
