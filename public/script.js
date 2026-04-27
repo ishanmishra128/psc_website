@@ -860,7 +860,7 @@ function syncRsvpButtonStates() {
         const registration = docSnap.data()?.registration || [];
         const alreadyRsvpd = registration.some((r) => r.user_id === user.uid);
         if (alreadyRsvpd) {
-          btn.textContent = "Registered ✓ (click to cancel)";
+          btn.textContent = "Registered (click to cancel)";
           btn.classList.remove("is-green");
           btn.classList.add("is-light");
         }
