@@ -562,6 +562,7 @@ function attachButtonListeners() {
     });
   });
 }
+
 // ── Handle RSVP ───────────────────────────────────────────────────────────────
 async function handleRsvp(btn) {
   const user = auth.currentUser;
@@ -680,6 +681,30 @@ document.getElementById("closeRsvpModal")?.addEventListener("click", () => {
 });
 document.getElementById("cancelRsvpModal")?.addEventListener("click", () => {
   closeModal("rsvpModal");
+});
+
+// ── Event delegation for delete event button ─────────────────────────────────
+document.addEventListener("click", async function (e) {
+  const btn = e.target.closest(".delete-event-btn");
+  if (!btn) return;
+
+  const eventId = btn.dataset.eventId;
+  console.log("Delete clicked, eventId:", eventId);
+
+  if (
+    !confirm(
+      "Are you sure you want to delete this event? This cannot be undone.",
+    )
+  )
+    return;
+
+  try {
+    await db.collection("events").doc(eventId).delete();
+    console.log("Event deleted successfully");
+  } catch (err) {
+    console.error("Error deleting event:", err);
+    alert("Error deleting event. Please try again.");
+  }
 });
 
 // end DOMContentLoaded
