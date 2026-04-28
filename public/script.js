@@ -13,7 +13,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Auth State Observer
+// Auth State changed listener - update UI accordingly
 auth.onAuthStateChanged(async (user) => {
   const navWelcome = document.getElementById("navWelcome");
   const navUserInfo = document.getElementById("navUserInfo");
@@ -22,7 +22,7 @@ auth.onAuthStateChanged(async (user) => {
   if (user) {
     document.body.classList.add("is-signed-in");
 
-    // Fetch role from Firestore
+    // get role from Firestore (admin or member)
     const userDoc = await db.collection("users").doc(user.uid).get();
     const role = userDoc.data()?.role || "Member";
 
@@ -65,7 +65,7 @@ function clearError(id) {
 document.addEventListener("DOMContentLoaded", () => {
   loadEvents();
   loadNextEvent();
-  // Open Modals
+  // open modals
   document.getElementById("openLoginModal")?.addEventListener("click", () => {
     clearError("loginError");
     openModal("loginModal");
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     openModal("signupModal");
   });
 
-  //  Close Modals
+  // close Modals
   document
     .getElementById("closeLoginModal")
     ?.addEventListener("click", () => closeModal("loginModal"));
@@ -98,14 +98,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ?.querySelector(".modal-background")
     ?.addEventListener("click", () => closeModal("signupModal"));
 
-  // ── Hamburger menu toggle ────────────────────────────────────────────────────
+  // Hamburger menu toggle
   const burger = document.querySelector(".navbar-burger");
   const menu = document.getElementById("mainNavbar");
   burger?.addEventListener("click", () => {
     burger.classList.toggle("is-active");
     menu.classList.toggle("is-active");
   });
-  // Close menu when a nav link is clicked
+  // close menu when a nav link is clicked (for mobile) -- stackoverflow.com
   document
     .querySelectorAll("#mainNavbar a, #mainNavbar button")
     .forEach((el) => {
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  // Enter key support for login
+  // user can press Enter to submit login form stackoverflow.com
   ["loginEmail", "loginPassword"].forEach((id) => {
     document.getElementById(id)?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") document.getElementById("loginSubmit")?.click();
@@ -160,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
         errorEl.textContent = "Please fill in all fields.";
         return;
       }
+      // Email must end with @wisc.edu and password must be at least 6 characters
       if (!email.toLowerCase().endsWith("@wisc.edu")) {
         errorEl.textContent = "Email must end in @wisc.edu.";
         return;
@@ -169,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      // error handling
       try {
         // Create auth user
         const cred = await auth.createUserWithEmailAndPassword(email, password);
@@ -178,8 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
           displayName: `${firstName} ${lastName}`,
         });
 
-        //  Write to Firestore `users` collection
-        // Matches your schema: Name (map), email, role, createdAt
+        //  Write to firestore users collection
         await db
           .collection("users")
           .doc(cred.user.uid)
@@ -199,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("signupEmail").value = "";
         document.getElementById("signupPassword").value = "";
       } catch (err) {
+        // if an error occurs, use friendlyAuthError to show a user-friendly message instead of the raw Firebase error code
         errorEl.textContent = friendlyAuthError(err.code);
       }
     });
@@ -208,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
     auth.signOut();
   });
 
-  // Contact Form contact_messages collection
+  // Contact Form write tocontact_messages collection - trim out whitespace
   const form = document.querySelector("#contactForm");
   if (form) {
     form.addEventListener("submit", async function (e) {
@@ -220,7 +222,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const message = form.message.value.trim();
 
       try {
-        // Matches your schema: name, email, subject, message, created_at
         await db.collection("contact_messages").add({
           name: name,
           email: email,
@@ -232,12 +233,12 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset();
       } catch (err) {
         console.error("Error submitting contact form:", err);
-        alert("There was an error submitting your message. Please try again.");
+        alert("There was an error submitting the message. Please try again.");
       }
     });
   }
 
-  // ── Prompt sign-in on Register button click when logged out ──
+  // When clicking register for event, if not logged in, open login modal instead of registering
   document.querySelectorAll(".register-btn").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       if (!auth.currentUser) {
@@ -247,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-  // ── Prompt sign-in on Comment button click when logged out ──
+  // When clicking on post comment, if not logged in, open login modal instead of posting
   document.querySelectorAll(".post-comment-btn").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       if (!auth.currentUser) {
@@ -258,7 +259,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-// ── Category tag color helper ─────────────────────────────────────────────────
+
+// assign colors to categories for event creation and display
 function getCategoryTagClass(category) {
   const map = {
     community: "is-red",
@@ -268,7 +270,7 @@ function getCategoryTagClass(category) {
   };
   return map[(category || "").toLowerCase()] || "is-dark";
 }
-// ── Format date helpers ───────────────────────────────────────────────────────
+// format timestamps for firestore
 function formatDate(ts) {
   if (!ts) return "TBD";
   const d = ts.toDate();
@@ -285,7 +287,7 @@ function formatTime(ts) {
     .toDate()
     .toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
 }
-// ── Build a single event card (with or without comments section) ──────────────
+// build event cards from firestore
 function buildEventCard(doc, showComments = true) {
   const e = doc.data();
   const eventId = doc.id;
@@ -366,7 +368,7 @@ function buildEventCard(doc, showComments = true) {
   `;
   return wrapper;
 }
-// ── Load all events — events.html ─────────────────────────────────────────────
+// load all events without refreshing — events.html
 function loadEvents() {
   const container = document.getElementById("eventsContainer");
   if (!container) return;
@@ -387,14 +389,13 @@ function loadEvents() {
       snapshot.forEach((doc) => {
         container.appendChild(buildEventCard(doc, true));
       });
-      // Re-attach listeners after DOM is rebuilt
       attachButtonListeners();
       syncRsvpButtonStates();
       loadAllComments();
       if (auth.currentUser) loadAllComments();
     });
 }
-// ── Load next upcoming event only — index.html ────────────────────────────────
+// next upcoming event on homepage (only one)
 function loadNextEvent() {
   const container = document.getElementById("nextEventContainer");
   if (!container) return;
@@ -421,15 +422,15 @@ function loadNextEvent() {
       `;
         return;
       }
-      // showComments = false for homepage
+      // hide comments section on homepage
       container.appendChild(buildEventCard(nextDoc, false));
       attachButtonListeners();
     })
     .catch((err) => console.error("Error loading next event:", err));
 }
-// ── Re-attach register + comment intercept listeners ─────────────────────────
+// sync RSVP button based on whether user has RSVPd to each event
 function attachButtonListeners() {
-  // ── Register / RSVP ──────────────────────────────────────────────────────
+  // register/rsvp
   document.querySelectorAll(".register-btn").forEach((btn) => {
     const fresh = btn.cloneNode(true);
     btn.replaceWith(fresh);
@@ -444,7 +445,7 @@ function attachButtonListeners() {
     });
   });
 
-  // ── Post Comment ─────────────────────────────────────────────────────────
+  // Post comment
   document.querySelectorAll(".postcommentbtn").forEach((btn) => {
     const fresh = btn.cloneNode(true);
     btn.replaceWith(fresh);
@@ -487,7 +488,7 @@ function attachButtonListeners() {
       }
     });
   });
-  // ── View RSVPs (admin only) ──────────────────────────────────────────────────
+  // View RSVPs (admin only)
   document.querySelectorAll(".view-rsvp-btn").forEach((btn) => {
     const fresh = btn.cloneNode(true);
     btn.replaceWith(fresh);
@@ -495,7 +496,7 @@ function attachButtonListeners() {
       const eventId = fresh.dataset.eventId;
       const eventTitle = fresh.dataset.eventTitle;
 
-      // Set modal title
+      // Modal title with event name
       document.getElementById("rsvpModalTitle").textContent =
         `RSVPs — ${eventTitle}`;
 
@@ -563,7 +564,7 @@ function attachButtonListeners() {
   });
 }
 
-// ── Handle RSVP ───────────────────────────────────────────────────────────────
+// RSVP or un-RSVP to event
 async function handleRsvp(btn) {
   const user = auth.currentUser;
   if (!user) return;
@@ -579,7 +580,7 @@ async function handleRsvp(btn) {
     const alreadyRsvpd = registration.some((r) => r.user_id === user.uid);
 
     if (alreadyRsvpd) {
-      // ── Un-RSVP ───────────────────────────────────────────────────────
+      // Un-RSVP
       const updated = registration.filter((r) => r.user_id !== user.uid);
       await docRef.update({ registration: updated });
       btn.textContent = "Register for Event";
@@ -587,7 +588,7 @@ async function handleRsvp(btn) {
       btn.classList.add("is-green");
       btn.disabled = false;
     } else {
-      // ── RSVP ──────────────────────────────────────────────────────────
+      // RSVP
       const rsvpEntry = {
         user_id: user.uid,
         user_email: user.email,
@@ -606,7 +607,7 @@ async function handleRsvp(btn) {
   }
 }
 
-// ── Admin: Create Event ──────────────────────────────────────────────────────
+// Admin: Create Event
 document
   .getElementById("adminEventSubmit")
   ?.addEventListener("click", async () => {
@@ -665,7 +666,7 @@ document
       errorEl.textContent = "Error creating event. Please try again.";
     }
   });
-// ── Open Admin Modal ─────────────────────────────────────────────────────────
+// Open Admin Modal
 document.getElementById("openAdminModal")?.addEventListener("click", () => {
   openModal("adminEventModal");
 });
@@ -683,7 +684,7 @@ document.getElementById("cancelRsvpModal")?.addEventListener("click", () => {
   closeModal("rsvpModal");
 });
 
-// ── Event delegation for delete event button ─────────────────────────────────
+// Delete event (admin only) - using event delegation since these buttons are dynamically generated - stackoverflow.com & GenAI
 document.addEventListener("click", async function (e) {
   const btn = e.target.closest(".delete-event-btn");
   if (!btn) return;
@@ -709,8 +710,8 @@ document.addEventListener("click", async function (e) {
 
 // end DOMContentLoaded
 
-// Load Comments from Firestore
-// Comments live as an array inside the event document (not a subcollection)
+// Load Comments from Firestore - stackoverflow.com & GenAI
+// Comments live as an array inside the event document
 const commentListeners = [];
 
 function loadAllComments() {
@@ -730,7 +731,7 @@ function loadAllComments() {
     if (commentsSection) commentsSection.style.display = "block";
     if (signedOutMsg) signedOutMsg.style.display = "none";
 
-    // Real-time listener on the event document
+    // Listener on the event document
     const unsub = db
       .collection("events")
       .doc(eventId)
@@ -743,7 +744,7 @@ function loadAllComments() {
         commentsContainer.innerHTML = "";
         if (commentCount) commentCount.textContent = comments.length;
 
-        // Sort by created-at ascending (note the hyphen in your schema)
+        // Sort by created-at ascending
         const sorted = [...comments].sort((a, b) => {
           const aTime = a["created-at"]?.toMillis?.() || 0;
           const bTime = b["created-at"]?.toMillis?.() || 0;
@@ -760,7 +761,7 @@ function loadAllComments() {
               })
             : "Just now";
 
-          // All users can delete their own comments; Admins can delete any comment
+          // All users can delete their own comments. Admins can delete any comment
           const isOwner = auth.currentUser?.uid === comment.user_id;
           const isAdmin = document.body.classList.contains("is-admin");
           const canDelete = isOwner || isAdmin;
@@ -833,7 +834,7 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-// Map Firebase auth error codes to friendly messages
+// Map Firebase auth error codes to friendly messages -- stacoverflow.com, Copilot
 function friendlyAuthError(code) {
   const map = {
     "auth/user-not-found": "No account found with that email.",

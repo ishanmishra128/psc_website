@@ -153,7 +153,8 @@ a.box.contact-card:visited {
   height: 100%;
 }
 
-/* ── NEW: Auth visibility ─────────────────────────────────────────────────── */
+/* Authentication state handling */
+/* !important is used to override default styles -stackoverflow.com */
 
 /* Hide signed-in elements by default (signed-out state) */
 #navUserInfo {
@@ -166,7 +167,7 @@ a.box.contact-card:visited {
   gap: 0.75rem;
 }
 
-/* When JS adds .is-signed-in to <body>, swap visibility */
+/* When JS adds .is-signed-in, swap visibility */
 body.is-signed-in #navAuthBtns {
   display: none !important;
 }
@@ -176,14 +177,14 @@ body.is-signed-in #navUserInfo {
   gap: 0.75rem;
 }
 
-/* ── NEW: Comment block ───────────────────────────────────────────────────── */
+/* Comment block*/
 .commentblock {
   border: 1px solid #dbdbdb;
   border-radius: 8px;
   background-color: #fff;
 }
 
-/*  NEW: Signed-out comment prompt  */
+/* Signed-out comment prompt Not working */
 .signed-out-msg {
   padding: 1.5rem;
   text-align: center;
@@ -200,12 +201,12 @@ body.is-signed-in #navUserInfo {
   text-decoration: underline;
 }
 
-/* ── NEW: Modal header text ───────────────────────────────────────────────── */
+/* Modal header text  */
 .modal-card-head.has-background-black .modal-card-title {
   color: #fff;
 }
 
-/* ── Disabled state for logged-out buttons ───────────────────────────────── */
+/* Disable logged-out buttons  */
 /* Register button greyed out when signed out */
 .register-btn {
   opacity: 0.45;
@@ -238,7 +239,7 @@ body.is-admin .admin-only {
   display: inline-flex !important;
 }
 
-/* Stack auth buttons vertically on mobile */
+/* Stack auth buttons vertically on mobile - GenAI */
 @media screen and (max-width: 1023px) {
   #navAuthBtns,
   #navUserInfo {
