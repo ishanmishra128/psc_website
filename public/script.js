@@ -350,14 +350,14 @@ function buildEventCard(doc, showComments = true) {
         </p>
       </div>
       <p class="mb-4 has-text-grey-dark">${escapeHtml(e.event_description || "")}</p>
-      <button class="button is-green has-text-weight-bold register-btn" style="border-radius: 8px;" data-event-id="${eventId}">
+      <button class="button is-green has-text-weight-bold register-btn" style="border-radius: 8p;" data-event-id="${eventId}">
         Register for Event
       </button>
-      <button class="button is-link has-text-weight-bold admin-only view-rsvp-btn mt-2" 
+      <button class="button is-link has-text-weight-bold admin-only view-rsvp-btn" 
         style="border-radius: 8px;" data-event-id="${eventId}" data-event-title="${escapeHtml(e.event_title)}">
         View RSVPs
       </button>
-      <button class="button is-danger has-text-weight-bold admin-only delete-event-btn mt-2"
+      <button class="button is-danger has-text-weight-bold admin-only delete-event-btn"
         style="border-radius: 8px;" data-event-id="${eventId}">
         Delete Event
       </button>
